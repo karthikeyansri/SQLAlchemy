@@ -83,8 +83,6 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    # Docstring 
-    """Return a list of precipitations from last year"""
     # Design a query to retrieve the last 12 months of precipitation data and plot the results
     max_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     max_date = max_date[0]
@@ -101,8 +99,6 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    # Docstring
-    """Return a JSON list of stations from the dataset."""
     results_stations =  session.query(Measurement.station).group_by(Measurement.station).all()
     stations_list = list(np.ravel(results_stations))
     return jsonify(stations_list)
@@ -110,9 +106,6 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def tobs():
-    # Docstring
-    """Return a JSON list of Temperature Observations (tobs) for the previous year."""
-
     # Design a query to retrieve the last 12 months of precipitation data and plot the results
     max_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     max_date = max_date[0]
@@ -127,10 +120,7 @@ def tobs():
 
 
 @app.route("/api/v1.0/<start>")
-def trip1(start):
-    # Docstring
-    """Return a JSON list of tmin, tmax, tavg for the dates greater than or equal to the date provided"""
-
+def trip1(start): 
     from_start = session.query(Measurement.date, func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).group_by(Measurement.date).all()
     from_start_list = list(from_start)
     return jsonify(from_start_list)
@@ -138,9 +128,6 @@ def trip1(start):
 
 @app.route("/api/v1.0/<start>/<end>")
 def trip2(start,end):
-    # Docstring
-    """Return a JSON list of tmin, tmax, tavg for the dates in range of start date and end date inclusive"""
-    
     between_dates = session.query(Measurement.date, func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).group_by(Measurement.date).all()
     between_dates_list=list(between_dates)
     return jsonify(between_dates_list)
